@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Botao from '../../components/Botao/botao';
 import styles from './login.module.css'; // Caminho relativo, correto
-import FormularioLogin from '../../components/Formulario/FormularioLogin';
+import FormularioLogin from '../../components/FormularioLogin/FormularioLogin';
 
 
 export function Login() {
