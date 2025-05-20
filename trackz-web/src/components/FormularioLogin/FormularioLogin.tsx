@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import Botao from '../Botao/botao';
 import styles from './FormularioLogin.module.css';
+import { login } from '../../services/authService';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
+
 
 const FormularioLogin = () => {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
   const [erros, setErros] = useState<{ usuario?: string; senha?: string }>({});
+  const { login: loginContext } = useContext(AuthContext);
+
 
   const validarCampos = () => {
     const novosErros: { usuario?: string; senha?: string } = {};
@@ -24,14 +30,24 @@ const FormularioLogin = () => {
     return Object.keys(novosErros).length === 0; // sem erros?
   };
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!validarCampos()) return;
-
-    setTimeout(() => {
-        alert(`Bem-vindo(a), ${usuario}!`);
-        // Aqui você pode simular navegação também
-    }, 1000); // 1 segundo de simulação
+  
+    try {
+      const token = await login(usuario, senha); // << usa o serviço
+  
+      if (token) {
+        loginContext(token); // ✅ atualiza o contexto e salva no localStorage
+        alert('Login realizado com sucesso!');
+        // Redirecionar aqui se quiser
+      } else {
+        alert('Usuário ou senha inválidos.');
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+      alert('Erro de conexão. Verifique sua internet ou o servidor.');
+    }
   };
 
   return (
