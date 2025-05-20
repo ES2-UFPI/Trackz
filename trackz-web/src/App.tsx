@@ -1,7 +1,8 @@
 import React from 'react';
+import RotaPrivada from './routes/RotaPrivada';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Botao from './components/Botao/botao';
-
+import Dashboard from './pages/dashboard/Dashboard';
 import { Login } from './pages/login/login';
 import { Cadastro } from './pages/cadastro/cadastro';
 
@@ -30,6 +31,15 @@ function App() {
         {/* Demais páginas */}
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <RotaPrivada>
+              <Dashboard />
+            </RotaPrivada>
+          }
+        />
       </Routes>
     </Router>
   );

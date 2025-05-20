@@ -4,9 +4,12 @@ import styles from './FormularioLogin.module.css';
 import { login } from '../../services/authService';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const FormularioLogin = () => {
+  const navigate = useNavigate();
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
   const [erros, setErros] = useState<{ usuario?: string; senha?: string }>({});
@@ -40,7 +43,7 @@ const FormularioLogin = () => {
       if (token) {
         loginContext(token); // ✅ atualiza o contexto e salva no localStorage
         alert('Login realizado com sucesso!');
-        // Redirecionar aqui se quiser
+        navigate('/dashboard'); // redirecionairecionar aqui se quiser
       } else {
         alert('Usuário ou senha inválidos.');
       }
