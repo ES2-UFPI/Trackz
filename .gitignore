@@ -1,13 +1,4 @@
 # compiled output
-
-# Backend (trackz-api)
-trackz-api/dist/
-trackz-api/node_modules/
-
-# Frontend (trackz-web)
-trackz-web/build/
-trackz-web/node_modules/
-
 /dist
 /node_modules
 /build

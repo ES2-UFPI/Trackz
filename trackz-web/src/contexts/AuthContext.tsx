@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 
-export interface AuthContextType {
+interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   login: (token: string) => void;
