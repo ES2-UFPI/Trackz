@@ -77,3 +77,14 @@
   text-align: center;
   font-weight: bold;
 }
+
+.errorGeral {
+  color: #ff4d4f;
+  background-color: rgba(255, 77, 79, 0.1);
+  border: 1px solid #ff4d4f;
+  padding: 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 1rem; /* Espaço antes do primeiro campo */
+  font-size: 0.9rem;
+}
