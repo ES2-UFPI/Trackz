@@ -1,60 +1,57 @@
-import React, { useState } from 'react';
-import Botao from '../Botao/botao';
-import styles from './FormularioLogin.module.css';
-import { login } from '../../services/authService';
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import React, { useState, useContext, FormEvent, ChangeEvent } from 'react';
+import Botao from '../Botao/botao'; //
+import styles from './FormularioLogin.module.css'; //
 import { useNavigate } from 'react-router-dom';
+import { AuthContext, AuthContextType } from '../../contexts/AuthContext'; //
+import { login } from '../../services/authService'; // 1. ADICIONE A IMPORTAÇÃO DA FUNÇÃO 'login'
 
+interface ErrosLogin {
+  usuario?: string;
+  senha?: string;
+  geral?: string;
+}
 
-
-const FormularioLogin = () => {
-  const navigate = useNavigate();
+const FormularioLogin: React.FC = () => {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
-  const [erros, setErros] = useState<{ usuario?: string; senha?: string }>({});
-  const { login: loginContext } = useContext(AuthContext);
-
+  const [erros, setErros] = useState<ErrosLogin>({});
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext) as AuthContextType;
 
   const validarCampos = () => {
-    const novosErros: { usuario?: string; senha?: string } = {};
-
-    if (!usuario.trim()) {
-      novosErros.usuario = 'Usuário é obrigatório.';
-    }
-
-    if (!senha) {
-      novosErros.senha = 'Senha é obrigatória.';
-    } else if (senha.length < 6) {
-      novosErros.senha = 'Senha deve ter pelo menos 6 caracteres.';
-    }
-
+    const novosErros: ErrosLogin = {};
+    if (!usuario) novosErros.usuario = 'Usuário é obrigatório.';
+    if (!senha) novosErros.senha = 'Senha é obrigatória.';
     setErros(novosErros);
-    return Object.keys(novosErros).length === 0; // sem erros?
+    return Object.keys(novosErros).length === 0;
   };
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
     if (!validarCampos()) return;
-  
+
+    setErros(prev => ({ ...prev, geral: undefined }));
+
     try {
-      const token = await login(usuario, senha); // << usa o serviço
-  
-      if (token) {
-        loginContext(token); // ✅ atualiza o contexto e salva no localStorage
-        alert('Login realizado com sucesso!');
-        navigate('/dashboard'); // redirecionairecionar aqui se quiser
+      const dadosParaLogin = { username: usuario, senha };
+      // 2. USE A FUNÇÃO 'login' DIRETAMENTE
+      const data = await login(dadosParaLogin);
+
+      if (authContext && data.access_token) {
+        authContext.login(data.access_token);
+        navigate('/dashboard');
       } else {
-        alert('Usuário ou senha inválidos.');
+        throw new Error('Não foi possível obter o token de acesso.');
       }
-    } catch (error) {
-      console.error('Erro na requisição:', error);
-      alert('Erro de conexão. Verifique sua internet ou o servidor.');
+    } catch (error: any) {
+      console.error('Erro no login:', error);
+      setErros(prev => ({ ...prev, geral: error.message || 'Ocorreu um erro.' }));
     }
   };
 
   return (
     <form className={styles.form} onSubmit={handleLogin}>
+        {erros.geral && <span className={styles.errorGeral}>{erros.geral}</span>}
       <div className={styles.campo}>
         <label htmlFor="usuario">Usuário</label>
         <input
@@ -63,10 +60,10 @@ const FormularioLogin = () => {
           value={usuario}
           onChange={(e) => setUsuario(e.target.value)}
           placeholder="Digite seu usuário"
+          className={styles.input} // Garanta que a classe de estilo do input está aqui
         />
         {erros.usuario && <span className={styles.erro}>{erros.usuario}</span>}
       </div>
-
       <div className={styles.campo}>
         <label htmlFor="senha">Senha</label>
         <input
@@ -75,10 +72,10 @@ const FormularioLogin = () => {
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           placeholder="Digite sua senha"
+          className={styles.input} // Garanta que a classe de estilo do input está aqui
         />
         {erros.senha && <span className={styles.erro}>{erros.senha}</span>}
       </div>
-
       <Botao type="submit">Entrar</Botao>
     </form>
   );

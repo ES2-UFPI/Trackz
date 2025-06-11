@@ -1,14 +1,28 @@
 import React, { useState } from "react";
 import styles from "./FormularioCadastro.module.css";
 import Botao from "../Botao/botao";
+import { register } from '../../services/authService';
+import { useNavigate } from 'react-router-dom'; // Importe o useNavigate para redirecionar
+
 
 const FormularioCadastro = () => {
+
+    interface IErros {
+    nome?: string;
+    email?: string;
+    usuario?: string;
+    senha?: string;
+    confirmarSenha?: string;
+    geral?: string; // Adicione 'geral' aqui também se for usá-lo
+    }
+
+    const navigate = useNavigate(); // Inicialize o useNavigate
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [usuario, setUsuario] = useState("");
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
-    const [erros, setErros] = useState<{ [campo: string]: string }>({});
+    const [erros, setErros] = useState<IErros>({});
 
     const validarCampos = () => { {
     const novosErros: { [campo: string]: string } = {};
@@ -21,21 +35,35 @@ const FormularioCadastro = () => {
     return Object.keys(novosErros).length === 0;
    };
     }
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!validarCampos()) {
-            alert("Por favor, corrija os erros no formulário.");
-            return; 
-        }
-        console.log('Cadastro enviado:', { nome, email, usuario, senha });
-        setTimeout(() => {
-        alert(`Usuário cadastrado com sucesso!`);
-        // Aqui você pode simular navegação também
-    }, 1000); // 1 segundo de simulação
-    };
-    return (
-        <form className={styles.form} onSubmit={handleSubmit}>
 
+    const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validarCampos()) { // Adapte sua função validarCampos se necessário
+        return;
+    }
+
+    setErros(prev => ({ ...prev, geral: undefined }));
+
+    try {
+        // A CORREÇÃO ESTÁ AQUI: a chave agora é 'username'
+        const dadosParaCadastro = { nome, email, username: usuario, senha };
+        
+        const usuarioCriado = await register(dadosParaCadastro);
+        
+        console.log('Usuário cadastrado:', usuarioCriado);
+        alert(`Usuário ${usuarioCriado.username} cadastrado com sucesso! Você será redirecionado para o login.`);
+
+        navigate('/login');
+
+    } catch (error: any) {
+        console.error('Erro no cadastro:', error);
+        setErros(prev => ({ ...prev, geral: error.message || 'Ocorreu um erro desconhecido.' }));
+    }
+};
+    return (
+        
+        <form className={styles.form} onSubmit={handleSubmit}>
+            {erros.geral && <span className={styles.errorGeral}>{erros.geral}</span>}
             <label>
                 Nome Completo:
                 <input
