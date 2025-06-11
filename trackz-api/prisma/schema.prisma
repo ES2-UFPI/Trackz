@@ -1,0 +1,28 @@
+// Conteúdo completo para prisma/schema.prisma
+
+// 1. Configura o gerador do Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. Define a fonte de dados (O BLOCO QUE ESTAVA FALTANDO)
+// Ele diz ao Prisma para usar o PostgreSQL e pegar a URL de conexão do arquivo .env
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 3. Define o seu modelo de dados para o usuário
+model User {
+  id            String    @id @default(cuid())
+  nome          String
+  email         String    @unique
+  username      String    @unique
+  senha         String
+  biografia     String?
+  fotoPerfil    String?   @map("foto_perfil")
+  isBloqueado   Boolean   @default(false) @map("is_bloqueado")
+  dataCadastro  DateTime  @default(now()) @map("data_cadastro")
+  
+  @@map("users") // Mapeia para a tabela "users" no banco de dados
+}
