@@ -7,11 +7,11 @@ export default tseslint.config(
   // Estende as configurações recomendadas E as que exigem informação de tipo
   ...tseslint.configs.recommendedTypeChecked,
   {
-    // Aplica configurações específicas para arquivos TypeScript
     languageOptions: {
       parserOptions: {
         project: true,
         // A linha abaixo garante que o linter encontre seu tsconfig.json
+        // Ele vai procurar por tsconfig.json a partir do diretório onde este config está.
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -26,6 +26,7 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      // Adicione outras regras customizadas aqui se precisar
     },
   },
   {

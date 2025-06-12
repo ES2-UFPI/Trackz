@@ -69,7 +69,6 @@ export class AuthService {
     });
 
     if (user && (await bcrypt.compare(pass, user.senha))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { senha, ...result } = user;
       return result;
     }
