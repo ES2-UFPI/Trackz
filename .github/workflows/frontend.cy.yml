@@ -1,0 +1,39 @@
+# .github/workflows/frontend-ci.yml
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+    paths:
+      - 'trackz-web/**' # Só roda se houver mudanças no frontend
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./trackz-web # Define o diretório de trabalho
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'trackz-web/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        # O '-- --watchAll=false' é crucial para que os testes rodem uma vez e terminem
+        run: npm test -- --watchAll=false
+
+      - name: Build Project
+        run: npm run build
