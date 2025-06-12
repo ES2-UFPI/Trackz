@@ -69,7 +69,8 @@ export class AuthService {
     });
 
     if (user && (await bcrypt.compare(pass, user.senha))) {
-      const { senha, ...result } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { senha, ...result } = user; // Adicione o comentário nesta linha
       return result;
     }
     return null;

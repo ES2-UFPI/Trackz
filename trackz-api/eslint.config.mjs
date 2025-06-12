@@ -2,35 +2,47 @@
 // @ts-check
 
 import tseslint from 'typescript-eslint';
+import jestPlugin from 'eslint-plugin-jest';
 
 export default tseslint.config(
-  // Estende as configurações recomendadas E as que exigem informação de tipo
-  ...tseslint.configs.recommendedTypeChecked,
+  // === Bloco 1: Configuração para TODO o projeto TypeScript ===
   {
+    // Aplica-se a todos os arquivos .ts
+    files: ['**/*.ts'],
+    // Usa as configurações recomendadas que precisam de informação de tipo
+    extends: [
+      ...tseslint.configs.recommendedTypeChecked,
+    ],
+    // Informa ao ESLint como "ler" o TypeScript
     languageOptions: {
+      parser: tseslint.parser,
       parserOptions: {
         project: true,
-        // A linha abaixo garante que o linter encontre seu tsconfig.json
-        // Ele vai procurar por tsconfig.json a partir do diretório onde este config está.
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    // Regras que se aplicam a todos os arquivos
     rules: {
-      // Relaxa a regra de 'variáveis não usadas' apenas para argumentos de função
-      // que começam com um underscore (_), o que é útil em NestJS.
       '@typescript-eslint/no-unused-vars': [
         'error',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-        },
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
-      // Adicione outras regras customizadas aqui se precisar
+      // Adicione outras regras globais aqui se desejar
     },
   },
+
+  // === Bloco 2: Configuração específica para arquivos de TESTE ===
   {
-    // Ignora o próprio arquivo de configuração da análise de lint
-    ignores: ['eslint.config.mjs'],
+    files: ['**/*.spec.ts'], // Aplica-se SOMENTE a arquivos de teste
+    // Usa as regras recomendadas do plugin do Jest
+    extends: [jestPlugin.configs['flat/recommended']],
+    rules: {
+      // Você pode sobrescrever regras do Jest aqui se precisar
+    },
+  },
+
+  // === Bloco 3: Arquivos a serem ignorados globalmente ===
+  {
+    ignores: ['dist/', 'node_modules/', 'eslint.config.mjs'],
   }
 );
