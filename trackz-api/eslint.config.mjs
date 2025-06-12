@@ -1,24 +1,35 @@
 // trackz-api/eslint.config.mjs
 // @ts-check
-import eslint from '@eslint/js';
+
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked, // Use a configuração recomendada com tipos
+  // Estende as configurações recomendadas E as que exigem informação de tipo
+  ...tseslint.configs.recommendedTypeChecked,
   {
+    // Aplica configurações específicas para arquivos TypeScript
     languageOptions: {
       parserOptions: {
-        project: true, // Diz ao linter para usar seu tsconfig.json
+        project: true,
+        // A linha abaixo garante que o linter encontre seu tsconfig.json
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  },
-  {
-    // Ignora a regra de variáveis não utilizadas para arquivos de configuração
-    files: ['eslint.config.mjs'],
     rules: {
-      '@typescript-eslint/no-unused-vars': 'off',
+      // Relaxa a regra de 'variáveis não usadas' apenas para argumentos de função
+      // que começam com um underscore (_), o que é útil em NestJS.
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
+  {
+    // Ignora o próprio arquivo de configuração da análise de lint
+    ignores: ['eslint.config.mjs'],
+  }
 );

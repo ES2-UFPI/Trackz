@@ -1,9 +1,11 @@
 // src/auth/auth.service.ts
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service'; // Ajustado para caminho relativo
 import * as bcrypt from 'bcryptjs';
-import { AuthDto, RegisterDto } from './dto'; // Criaremos este arquivo DTO a seguir
+import { AuthDto, RegisterDto } from './dto'; // 2. IMPORTE OS DTOs
+import { User } from '@prisma/client'; // 1. IMPORTE O TIPO 'User'
+
 
 @Injectable()
 export class AuthService {
@@ -59,7 +61,7 @@ export class AuthService {
   }
 
   // MÉTODO DE VALIDAÇÃO ATUALIZADO (antigo validarUsuario)
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<Omit<User, 'senha'> | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         username,
