@@ -1,6 +1,5 @@
-import { Controller, Post, HttpCode, HttpStatus, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, HttpCode, HttpStatus, Body} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { BadRequestException } from '@nestjs/common';
 import { AuthDto, RegisterDto } from './dto';
 
 
