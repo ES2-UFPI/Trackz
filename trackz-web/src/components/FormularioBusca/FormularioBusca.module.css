@@ -1,0 +1,22 @@
+.searchForm {
+  display: flex;
+  gap: 1rem;
+  width: 100%; /* Garante que o formulário ocupe o espaço disponível */
+}
+
+.searchInput {
+  flex-grow: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #2d2d2d;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.searchInput:focus {
+  border-color: #9f50ff;
+  box-shadow: 0 0 0 3px rgba(159, 80, 255, 0.25);
+}

@@ -5,6 +5,7 @@ import Cadastro from './pages/cadastro/cadastro'; //
 import Dashboard from './pages/dashboard/Dashboard'; //
 import { AuthProvider } from './contexts/AuthContext'; //
 import RotaPrivada from './routes/RotaPrivada'; //
+import Explorar from './pages/explorar/explorar';
 
 // --- Componentes Placeholder para novas rotas ---
 // Você pode criar arquivos separados para eles em 'src/pages/' depois,
@@ -16,15 +17,6 @@ const PaginaPerfil: React.FC = () => (
     {/* import Navbar from './components/Navbar/Navbar'; <Navbar /> */}
     <h1>Perfil do Usuário</h1>
     <p>Esta página exibirá e permitirá a edição do perfil do usuário.</p>
-    <p><Link to="/dashboard">Voltar para o Dashboard</Link></p>
-  </div>
-);
-
-const PaginaExplorar: React.FC = () => (
-  <div>
-    {/* <Navbar /> */}
-    <h1>Explorar</h1>
-    <p>Esta página permitirá a descoberta de novas músicas, álbuns e usuários.</p>
     <p><Link to="/dashboard">Voltar para o Dashboard</Link></p>
   </div>
 );
@@ -69,7 +61,7 @@ function App() {
           {/* Rotas Privadas (Protegidas) */}
           <Route path="/dashboard" element={<RotaPrivada><Dashboard /></RotaPrivada>} />
           <Route path="/perfil" element={<RotaPrivada><PaginaPerfil /></RotaPrivada>} />
-          <Route path="/explorar" element={<RotaPrivada><PaginaExplorar /></RotaPrivada>} />
+          <Route path="/explorar" element={<RotaPrivada><Explorar /></RotaPrivada>} />
           <Route path="/configuracoes" element={<RotaPrivada><PaginaConfiguracoes /></RotaPrivada>} />
 
           {/* Opcional: Uma rota "Não Encontrado" (404) */}
