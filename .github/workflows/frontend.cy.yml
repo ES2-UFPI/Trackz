@@ -6,8 +6,7 @@ on:
     branches: [ main, dev ]
   pull_request:
     branches: [ main, dev ]
-    paths:
-      - 'trackz-web/**' # Só roda se houver mudanças no frontend
+    # A seção 'paths' foi removida
 
 jobs:
   build-and-test:
@@ -15,7 +14,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./trackz-web # Define o diretório de trabalho
+        working-directory: ./trackz-web
 
     steps:
       - name: Checkout Repository
@@ -32,7 +31,6 @@ jobs:
         run: npm install
 
       - name: Run Unit Tests
-        # O '-- --watchAll=false' é crucial para que os testes rodem uma vez e terminem
         run: npm test -- --watchAll=false
 
       - name: Build Project
