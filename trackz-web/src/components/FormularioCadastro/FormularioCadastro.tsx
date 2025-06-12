@@ -1,135 +1,190 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./FormularioCadastro.module.css";
 import Botao from "../Botao/botao";
-import { register } from '../../services/authService';
-import { useNavigate } from 'react-router-dom'; // Importe o useNavigate para redirecionar
+import { register } from '../../services/authService'; // Importando a função de cadastro
 
+interface IFormulario {
+  nome: string;
+  email: string;
+  username: string; // Usando 'username' para consistência com o DTO do backend
+  senha: string;
+  confirmarSenha: string;
+}
 
-const FormularioCadastro = () => {
+interface IErros {
+  nome?: string;
+  email?: string;
+  username?: string;
+  senha?: string;
+  confirmarSenha?: string;
+  geral?: string;
+}
 
-    interface IErros {
-    nome?: string;
-    email?: string;
-    usuario?: string;
-    senha?: string;
-    confirmarSenha?: string;
-    geral?: string; // Adicione 'geral' aqui também se for usá-lo
-    }
-
-    const navigate = useNavigate(); // Inicialize o useNavigate
-    const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
-    const [usuario, setUsuario] = useState("");
-    const [senha, setSenha] = useState("");
-    const [confirmarSenha, setConfirmarSenha] = useState("");
+const FormularioCadastro: React.FC = () => {
+    const [formulario, setFormulario] = useState<IFormulario>({
+      nome: "",
+      email: "",
+      username: "",
+      senha: "",
+      confirmarSenha: "",
+    });
     const [erros, setErros] = useState<IErros>({});
+    const navigate = useNavigate();
 
-    const validarCampos = () => { {
-    const novosErros: { [campo: string]: string } = {};
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormulario(prev => ({ ...prev, [name]: value }));
+      if (erros[name as keyof IErros]) {
+        setErros(prev => ({ ...prev, [name]: undefined }));
+      }
+    };
 
-    if (!email.includes('@')) novosErros.email = 'E-mail inválido.';
-    if (senha.length < 6) novosErros.senha = 'Senha precisa ter pelo menos 6 caracteres.';
-    if (senha !== confirmarSenha) novosErros.confirmarSenha = 'Senhas não coincidem.';
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        let novosErros: IErros = {};
 
-    setErros(novosErros);
-    return Object.keys(novosErros).length === 0;
-   };
-    }
+        // Validações
+        if (!formulario.nome.trim()) novosErros.nome = "Nome completo é obrigatório.";
+        if (!formulario.email.trim()) {
+            novosErros.email = "E-mail é obrigatório.";
+        } else if (!/\S+@\S+\.\S+/.test(formulario.email)) {
+            novosErros.email = 'E-mail inválido.';
+        }
+        if (!formulario.username.trim()) novosErros.username = "Nome de usuário é obrigatório.";
+        if (!formulario.senha) {
+            novosErros.senha = 'Senha é obrigatória.';
+        } else if (formulario.senha.length < 6) {
+            novosErros.senha = 'Senha precisa ter pelo menos 6 caracteres.';
+        }
+        if (formulario.senha !== formulario.confirmarSenha) {
+            novosErros.confirmarSenha = 'As senhas não coincidem.';
+        }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validarCampos()) { // Adapte sua função validarCampos se necessário
-        return;
-    }
+        if (Object.keys(novosErros).length > 0) {
+            setErros(novosErros);
+            return;
+        }
 
-    setErros(prev => ({ ...prev, geral: undefined }));
+        setErros({});
 
-    try {
-        // A CORREÇÃO ESTÁ AQUI: a chave agora é 'username'
-        const dadosParaCadastro = { nome, email, username: usuario, senha };
-        
-        const usuarioCriado = await register(dadosParaCadastro);
-        
-        console.log('Usuário cadastrado:', usuarioCriado);
-        alert(`Usuário ${usuarioCriado.username} cadastrado com sucesso! Você será redirecionado para o login.`);
+        try {
+            // Prepara os dados para a API (sem o campo de confirmar senha)
+            const dadosParaApi = {
+                nome: formulario.nome,
+                email: formulario.email,
+                username: formulario.username,
+                senha: formulario.senha
+            };
 
-        navigate('/login');
+            await register(dadosParaApi);
+            alert(`Usuário ${formulario.username} cadastrado com sucesso! Você será redirecionado.`);
+            navigate('/login');
 
-    } catch (error: any) {
-        console.error('Erro no cadastro:', error);
-        setErros(prev => ({ ...prev, geral: error.message || 'Ocorreu um erro desconhecido.' }));
-    }
-};
+        } catch (error: any) {
+            console.error('Erro no cadastro:', error);
+            setErros(prev => ({ ...prev, geral: error.message || 'Ocorreu um erro desconhecido.' }));
+        }
+    };
+
+    // A CORREÇÃO ESTÁ NO JSX ABAIXO:
     return (
-        
-        <form className={styles.form} onSubmit={handleSubmit}>
-            {erros.geral && <span className={styles.errorGeral}>{erros.geral}</span>}
-            <label>
-                Nome Completo:
-                <input
-                    type="text"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    className={styles.input}
-                    required
-                    placeholder="Digite seu nome completo"/>
-                    
-                {erros.nome && <span className={styles.error}>{erros.nome}</span>}
-            </label>
+    <form className={styles.form} onSubmit={handleSubmit}>
+      {/* ... (local para erro geral, se houver) ... */}
 
-            <label>
-                Email:
-                <input
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={styles.input}
-                    required
-                    placeholder="Digite um email válido"/>
-                {erros.email && <span className={styles.error}>{erros.email}</span>} 
-            </label>
+      {/* Campo Nome Completo */}
+      <div className={styles.campo}>
+        <label className={styles.label} htmlFor="cadastro-nome">
+          Nome Completo:
+          <input
+            id="cadastro-nome" // ID para o Cypress encontrar
+            type="text"
+            name="nome"
+            value={formulario.nome}
+            onChange={handleChange}
+            className={styles.input}
+            required
+            placeholder="Digite seu nome completo"
+          />
+          {erros.nome && <span className={styles.error}>{erros.nome}</span>}
+        </label>
+      </div>
 
-            <label>
-                Nome de Usuário:
-                <input
-                    type="text"
-                    value={usuario}
-                    onChange={(e) => setUsuario(e.target.value)}
-                    className={styles.input}
-                    required
-                    placeholder="Digite um nome de usuário"/>
-                    
-                {erros.usuario && <span className={styles.error}>{erros.usuario}</span>}
-            </label>
+      {/* Campo Email */}
+      <div className={styles.campo}>
+        <label className={styles.label} htmlFor="cadastro-email">
+          Email:
+          <input
+            id="cadastro-email" // ID para o Cypress encontrar
+            type="email"
+            name="email"
+            value={formulario.email}
+            onChange={handleChange}
+            className={styles.input}
+            required
+            placeholder="Digite um email válido"
+          />
+          {erros.email && <span className={styles.error}>{erros.email}</span>}
+        </label>
+      </div>
 
-            <label>
-                Senha:
-                <input
-                    type="password"
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
-                    className={styles.input}
-                    required
-                    placeholder="Digite uma senha"/>
-                    
-                {erros.senha && <span className={styles.error}>{erros.senha}</span>}
-            </label>
-            
-            <label>
-                Confirmar Senha:
-                <input
-                    type="password"
-                    value={confirmarSenha}
-                    onChange={(e) => setConfirmarSenha(e.target.value)}
-                    className={styles.input}
-                    required
-                    placeholder="Confirme a senha digitada"/>
-                    
-                   
-                {erros.confirmarSenha && <span className={styles.error}>{erros.confirmarSenha}</span>}   
-            </label>
-            <Botao type="submit"> Cadastrar </Botao>
-            </form>
-    )
-    }
+      {/* Campo Usuário */}
+      <div className={styles.campo}>
+        <label className={styles.label} htmlFor="cadastro-usuario">
+          Usuário:
+          <input
+            id="cadastro-usuario" // ID para o Cypress encontrar
+            type="text"
+            name="username" // Usando 'username' para consistência
+            value={formulario.username}
+            onChange={handleChange}
+            className={styles.input}
+            required
+            placeholder="Digite um nome de usuário"
+          />
+          {erros.username && <span className={styles.error}>{erros.username}</span>}
+        </label>
+      </div>
+
+      {/* Campo Senha */}
+      <div className={styles.campo}>
+        <label className={styles.label} htmlFor="cadastro-senha">
+          Senha:
+          <input
+            id="cadastro-senha" // ID para o Cypress encontrar
+            type="password"
+            name="senha"
+            value={formulario.senha}
+            onChange={handleChange}
+            className={styles.input}
+            required
+            placeholder="Digite uma senha (mín. 6 caracteres)"
+          />
+          {erros.senha && <span className={styles.error}>{erros.senha}</span>}
+        </label>
+      </div>
+
+      {/* Campo Confirmar Senha */}
+      <div className={styles.campo}>
+        <label className={styles.label} htmlFor="cadastro-confirmar-senha">
+          Confirmar Senha:
+          <input
+            id="cadastro-confirmar-senha" // ID para o Cypress encontrar
+            type="password"
+            name="confirmarSenha"
+            value={formulario.confirmarSenha}
+            onChange={handleChange}
+            className={styles.input}
+            required
+            placeholder="Confirme a senha digitada"
+          />
+          {erros.confirmarSenha && <span className={styles.error}>{erros.confirmarSenha}</span>}   
+        </label>
+      </div>
+      
+      <Botao type="submit"> Cadastrar </Botao>
+    </form>
+);
+};
+
 export default FormularioCadastro;
