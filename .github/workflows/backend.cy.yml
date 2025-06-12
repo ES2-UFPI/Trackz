@@ -3,9 +3,9 @@ name: Backend CI
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ dev ]
     # A seção 'paths' foi removida para simplificar e garantir a execução
 
 jobs:
