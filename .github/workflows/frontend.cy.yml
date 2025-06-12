@@ -3,9 +3,9 @@ name: Frontend CI
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ "chore/setup-ci-cd" ]
   pull_request:
-    branches: [ dev ]
+    branches: [ "chore/setup-ci-cd" ]
     # A seção 'paths' foi removida
 
 jobs:
