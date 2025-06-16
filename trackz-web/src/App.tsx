@@ -5,7 +5,7 @@ import Cadastro from './pages/cadastro/cadastro'; //
 import Dashboard from './pages/dashboard/Dashboard'; //
 import { AuthProvider } from './contexts/AuthContext'; //
 import RotaPrivada from './routes/RotaPrivada'; //
-import Explorar from './pages/explorar/explorar';
+import Explorar from './pages/explorar/Explorar';
 
 // --- Componentes Placeholder para novas rotas ---
 // Você pode criar arquivos separados para eles em 'src/pages/' depois,

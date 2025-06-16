@@ -14,9 +14,10 @@ interface IResultado {
 
 // 3. Crie os dados mockados
 const mockResults: IResultado[] = [
-  { id: '1', imageUrl: 'https://i.scdn.co/image/ab67616d0000b2734ae1c4c5c45a454accr09371', title: 'Discovery', artist: 'Daft Punk' },
-  { id: '2', imageUrl: 'https://i.scdn.co/image/ab67616d0000b273d54a52360851493505315529', title: 'Random Access Memories', artist: 'Daft Punk' },
-  { id: '3', imageUrl: 'https://i.scdn.co/image/ab67616d0000b273752e39634e9533a039755661', title: 'Homework', artist: 'Daft Punk' },
+  // O caminho começa com /images/, que aponta para a pasta public/images/
+  { id: '5', imageUrl: '/images/debi-tirar-mas-fotos.png', title: 'Debí Tirar Más Fotos', artist: 'Bad Bunny' },
+  { id: '1', imageUrl: '/images/nadie-sabe.jpg', title: 'nadie sabe lo que va a pasar mañana', artist: 'Bad Bunny' },
+  { id: '2', imageUrl: '/images/un-verano-sin-ti.jpg', title: 'Un Verano Sin Ti', artist: 'Bad Bunny' },
 ];
 
 const PaginaExplorar: React.FC = () => {
