@@ -62,6 +62,7 @@ function App() {
           <Route path="/dashboard" element={<RotaPrivada><Dashboard /></RotaPrivada>} />
           <Route path="/perfil" element={<RotaPrivada><PaginaPerfil /></RotaPrivada>} />
           <Route path="/explorar" element={<RotaPrivada><Explorar /></RotaPrivada>} />
+          <Route path="/explorar" element={<RotaPrivada><Explorar /></RotaPrivada>} />
           <Route path="/configuracoes" element={<RotaPrivada><PaginaConfiguracoes /></RotaPrivada>} />
 
           {/* Opcional: Uma rota "Não Encontrado" (404) */}
