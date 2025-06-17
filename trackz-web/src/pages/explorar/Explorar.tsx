@@ -57,6 +57,7 @@ const PaginaExplorar: React.FC = () => {
           {!isLoading && resultados.map(item => (
             <ResultadoItem
               key={item.id}
+              id={item.id} // <-- ADICIONE ESTA LINHA
               imageUrl={item.imageUrl}
               title={item.title}
               artist={item.artist}

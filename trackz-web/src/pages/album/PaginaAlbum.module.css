@@ -1,0 +1,102 @@
+/* src/pages/album/PaginaAlbum.module.css */
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(rgba(30, 30, 30, 0.6), #121212 40%);
+}
+
+.contentContainer {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.loadingText {
+  text-align: center;
+  color: #b3b3b3;
+  font-size: 1.2rem;
+  padding: 3rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end; /* Alinha na parte de baixo */
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.albumArt {
+  width: 230px;
+  height: 230px;
+  object-fit: cover;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  color:#b3b3b3
+}
+
+.albumType {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.albumTitle {
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0;
+  padding: 0;
+  line-height: 1.1;
+}
+
+.albumMeta {
+  margin-top: 1rem;
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+.albumMeta strong {
+  color: #ffffff;
+}
+
+.trackList {
+  display: flex;
+  flex-direction: column;
+}
+
+.trackRow {
+  display: grid;
+  grid-template-columns: 30px 1fr 50px; /* Coluna para número, nome e duração */
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.trackRow:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.trackNumber {
+  color: #b3b3b3;
+  text-align: right;
+}
+
+.trackName {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.trackDuration {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
