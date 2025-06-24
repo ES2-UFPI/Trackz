@@ -45,5 +45,47 @@ async function searchTracks(query) {
     previewUrl: track.preview_url
   }));
 }
+async function getTrackById(id) {
+  const token = await getAccessToken();
+  const res = await axios.get(`${process.env.SPOTIFY_API_URL}/tracks/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
 
-module.exports = { searchTracks };
+// 💿 2. Buscar álbum por ID
+async function getAlbumById(id) {
+  const token = await getAccessToken();
+  const res = await axios.get(`${process.env.SPOTIFY_API_URL}/albums/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+// 🎤 3. Buscar artista por ID
+async function getArtistById(id) {
+  const token = await getAccessToken();
+  const res = await axios.get(`${process.env.SPOTIFY_API_URL}/artists/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+// 🔝 4. Top músicas de um artista
+async function getArtistTopTracks(id, market = 'BR') {
+  const token = await getAccessToken();
+  const res = await axios.get(`${process.env.SPOTIFY_API_URL}/artists/${id}/top-tracks`, {
+    headers: { Authorization: `Bearer ${token}` },
+    params: { market }
+  });
+  return res.data.tracks;
+}
+
+module.exports = {
+  getAccessToken,
+  searchTracks,
+  getTrackById,
+  getAlbumById,
+  getArtistById,
+  getArtistTopTracks
+};
