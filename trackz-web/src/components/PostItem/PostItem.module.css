@@ -1,0 +1,108 @@
+.postContainer {
+  background-color: #181818;
+  border: 1px solid #282828;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.userName {
+  font-weight: bold;
+}
+
+.userUsername {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+.timestamp {
+  color: #b3b3b3;
+  font-size: 0.8rem;
+}
+
+.postBody {
+  line-height: 1.6;
+}
+
+.albumLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.albumInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background-color: #282828;
+  transition: background-color 0.2s;
+}
+
+.albumInfo:hover {
+  background-color: #3a3a3a;
+}
+
+.albumArt {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.albumDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.albumName {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.albumArtist {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.postActions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #282828;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.actionButton:hover {
+  color: #ffffff;
+}
