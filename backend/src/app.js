@@ -8,6 +8,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//Rota para o usuario
+const userRoutes = require('./routes/userRoutes');
+app.use('/users', userRoutes);
+
+
+//Rota pra explorar
+const exploreRoutes = require('./routes/exploreRoutes');
+app.use('/explore', exploreRoutes);
+
 // Rotas
 app.use('/spotify', spotifyRoutes);
 
