@@ -1,0 +1,40 @@
+.container {
+  position: fixed; /* Fica fixo na tela */
+  top: 20px;
+  right: 20px;
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast {
+  padding: 1rem 1.5rem;
+  color: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+}
+
+.success {
+  background-color: #28a745; /* Verde */
+}
+
+.error {
+  background-color: #dc3545; /* Vermelho */
+}
+
+.info {
+  background-color: #17a2b8; /* Azul */
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

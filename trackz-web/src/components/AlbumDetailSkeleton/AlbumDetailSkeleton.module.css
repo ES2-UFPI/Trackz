@@ -1,0 +1,33 @@
+.contentContainer {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* Espaço entre as linhas do skeleton */
+}
+
+.trackList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.trackRow {
+  display: grid;
+  grid-template-columns: 30px 1fr 50px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+}

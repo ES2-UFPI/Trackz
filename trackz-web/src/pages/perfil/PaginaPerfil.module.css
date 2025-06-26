@@ -71,3 +71,13 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
+/* Adicione estas classes ao seu src/pages/perfil/PaginaPerfil.module.css */
+.tabContent {
+  /* Estilos para o container do conteúdo da aba, se necessário */
+}
+
+.reviewsFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço entre os posts no perfil */
+}

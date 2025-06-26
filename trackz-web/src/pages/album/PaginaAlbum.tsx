@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
-import FormularioPost from '../../components/FormularioPost/FormularioPost'; // 1. IMPORTAÇÃO ADICIONADA
+import FormularioPost from '../../components/FormularioPost/FormularioPost';
 import styles from './PaginaAlbum.module.css';
-import { mockAlbuns, IAlbum } from '../../data/mockData'; // 2. IMPORTAÇÃO DOS DADOS CENTRAIS
+import { mockAlbuns, IAlbum } from '../../data/mockData';
+import { useNotification } from '../../contexts/NotificationContext';
+import AlbumDetailSkeleton from '../../components/AlbumDetailSkeleton/AlbumDetailSkeleton'; // 1. IMPORTE O SKELETON
+import { IPost, IComment } from '../../types'; // Importa do arquivo central
+
 
 // Função auxiliar para formatar a duração em minutos e segundos
 const formatDuration = (ms: number) => {
@@ -15,47 +19,40 @@ const formatDuration = (ms: number) => {
 const PaginaAlbum: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>();
 
-  // Estados para os dados do álbum, carregamento e submissão de post
+  // Estados
   const [album, setAlbum] = useState<IAlbum | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmittingPost, setIsSubmittingPost] = useState(false); // 3. ESTADO ADICIONADO
+  const [isSubmittingPost, setIsSubmittingPost] = useState(false);
+  const { addNotification } = useNotification();
 
   useEffect(() => {
-    // Simula a busca de dados quando o componente é montado
+    // Simula a busca de dados
     console.log('Buscando detalhes para o álbum com ID:', albumId);
-    
     setIsLoading(true);
     setTimeout(() => {
-      // 4. LÓGICA DE BUSCA CORRIGIDA
-      // Encontra o álbum correto no nosso "banco de dados" mockado
       const albumEncontrado = mockAlbuns.find(a => a.id === albumId);
-      
-      setAlbum(albumEncontrado || null); // Define o álbum encontrado ou null se não achar
+      setAlbum(albumEncontrado || null);
       setIsLoading(false);
-    }, 500); // 0.5 segundo de simulação
-  }, [albumId]); // O useEffect roda novamente se o albumId na URL mudar
+    }, 1500); // Aumentado para 1.5s para ver melhor o skeleton
+  }, [albumId]);
 
-  // 5. FUNÇÃO ADICIONADA para lidar com a submissão do post
   const handlePostSubmit = (textoDoPost: string) => {
-    console.log('Post a ser salvo para o álbum', albumId, ':', textoDoPost);
-    
-    // Simula o envio para a API
+    console.log('Post a ser salvo para o álbum:', textoDoPost);
     setIsSubmittingPost(true);
+    
     setTimeout(() => {
-      alert('Post publicado com sucesso! (Simulação)');
+      addNotification('Post publicado com sucesso!', 'success');
       setIsSubmittingPost(false);
     }, 2000);
   };
 
-
-  // Lógica para renderizar o estado de carregamento
+  // 2. LÓGICA DE RENDERIZAÇÃO DO CARREGAMENTO ATUALIZADA
   if (isLoading) {
     return (
       <div className={styles.pageWrapper}>
         <Navbar />
-        <main className={styles.contentContainer}>
-          <p className={styles.loadingText}>Carregando detalhes do álbum...</p>
-        </main>
+        {/* Renderiza o componente de esqueleto da página inteira */}
+        <AlbumDetailSkeleton /> 
       </div>
     );
   }
@@ -101,7 +98,6 @@ const PaginaAlbum: React.FC = () => {
           ))}
         </div>
 
-        {/* 6. SEÇÃO DE POSTAGEM ADICIONADA */}
         <div className={styles.postSection}>
           <h2>Sua Análise</h2>
           <FormularioPost 

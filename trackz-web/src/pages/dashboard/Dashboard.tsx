@@ -1,52 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import PostItem from '../../components/PostItem/PostItem'; // 1. ADICIONE ESTA LINHA DE IMPORTAÇÃO
-import styles from './Dashboard.module.css'; // Renomeei de 'dashStyles' para 'styles' para consistência
+import PostItem from '../../components/PostItem/PostItem';
+import PostItemSkeleton from '../../components/PostItemSkeleton/PostItemSkeleton'; // 1. IMPORTE O SKELETON
+import styles from './Dashboard.module.css';
+import { IPost, IComment } from '../../types'; // Importa do arquivo central
 
-// Definindo a interface para um post, para garantir a consistência dos dados
-interface IPost {
-  id: string;
-  user: {
-    name: string;
-    username: string;
-    avatarUrl: string;
-  };
-  post: {
-    text: string;
-    timestamp: string;
-  };
-  album: {
-    id: string;
-    name: string;
-    artist: string;
-    imageUrl: string;
-  };
-}
-
-// Criando os dados mockados
+// Dados mockados completos
 const mockFeedPosts: IPost[] = [
   {
     id: 'p1',
     user: { name: 'Antonio Anderson', username: 'and21', avatarUrl: '/images/default-avatar.png' },
     post: { text: 'Este álbum é uma obra-prima! A produção é incrível e as melodias são contagiantes. Não consigo parar de ouvir.', timestamp: '2h atrás' },
-    album: { id: '2', name: 'Un Verano Sin Ti', artist: 'Bad Bunny', imageUrl: '/images/un-verano-sin-ti.jpg' }
+    album: { id: '2', name: 'Un Verano Sin Ti', artist: 'Bad Bunny', imageUrl: '/images/un-verano-sin-ti.jpg' },
+    likesCount: 15,
+    isLiked: false,
+    comments: [
+      { id: 'c1', user: { username: 'gabLCS', avatarUrl: '/images/default-avatar.png' }, text: 'Concordo totalmente! A melhor do álbum.' },
+      { id: 'c2', user: { username: 'marcosv', avatarUrl: '/images/default-avatar.png' }, text: 'Clássico instantâneo.' },
+    ],
   },
   {
     id: 'p2',
     user: { name: 'Gabriel Leonardo', username: 'gabLCS', avatarUrl: '/images/default-avatar.png' },
     post: { text: 'Uma viagem nostálgica. Me lembra os verões da minha adolescência. Recomendo demais!', timestamp: '5h atrás' },
-    album: { id: '5', name: 'Debí Tirar Más Fotos', artist: 'Bad Bunny', imageUrl: '/images/debi-tirar-mas-fotos.jpg' }
+    album: { id: '5', name: 'Debí Tirar Más Fotos', artist: 'Bad Bunny', imageUrl: '/images/debi-tirar-mas-fotos.jpg' },
+    likesCount: 32,
+    isLiked: true,
+    comments: [],
   },
-  {
-    id: 'p3',
-    user: { name: 'Marcos Vinicius', username: 'marcosv', avatarUrl: '/images/default-avatar.png' },
-    post: { text: 'Não esperava por essa sonoridade, mas fui positivamente surpreendido. Que trabalho!', timestamp: '1d atrás' },
-    album: { id: '1', name: 'nadie sabe lo que va a pasar mañana', artist: 'Bad Bunny', imageUrl: '/images/nadie-sabe.jpg' }
-  }
 ];
 
 const Dashboard: React.FC = () => {
-  // Estado para armazenar os posts do feed
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,8 +39,40 @@ const Dashboard: React.FC = () => {
     setTimeout(() => {
       setPosts(mockFeedPosts);
       setIsLoading(false);
-    }, 1000); // 1 segundo de simulação
+    }, 2000); // Aumentado para 2s para ver melhor o skeleton
   }, []);
+
+  const handleLike = (postId: string) => {
+    const newPosts = posts.map(post => {
+      if (post.id === postId) {
+        return {
+          ...post,
+          isLiked: !post.isLiked,
+          likesCount: post.isLiked ? post.likesCount - 1 : post.likesCount + 1,
+        };
+      }
+      return post;
+    });
+    setPosts(newPosts);
+  };
+
+  const handleCommentSubmit = (postId: string, commentText: string) => {
+    const newPosts = posts.map(post => {
+      if (post.id === postId) {
+        const newComment: IComment = {
+          id: `c${Date.now()}`,
+          user: { username: 'and21', avatarUrl: '/images/default-avatar.png' },
+          text: commentText,
+        };
+        return {
+          ...post,
+          comments: [...post.comments, newComment],
+        };
+      }
+      return post;
+    });
+    setPosts(newPosts);
+  };
 
   return (
     <div className={styles.dashboardLayout}>
@@ -66,14 +82,19 @@ const Dashboard: React.FC = () => {
 
         <div className={styles.feedContainer}>
           {isLoading ? (
-            <p>Carregando feed...</p>
+            // 2. RENDERIZA OS SKELETONS EM VEZ DO TEXTO "CARREGANDO"
+            <>
+              <PostItemSkeleton />
+              <PostItemSkeleton />
+              <PostItemSkeleton />
+            </>
           ) : (
             posts.map(post => (
               <PostItem
                 key={post.id}
-                user={post.user}
-                post={post.post}
-                album={post.album}
+                postData={post}
+                onLike={handleLike}
+                onCommentSubmit={handleCommentSubmit}
               />
             ))
           )}

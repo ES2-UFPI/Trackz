@@ -68,3 +68,32 @@
   flex-direction: column;
   gap: 1.5rem; /* Espaço entre cada post */
 }
+
+/* Adicione estas classes */
+.postFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #282828;
+}
+
+.likesContainer {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.postActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.actionButton {
+  /* ... estilos que você já tem ... */
+  transition: color 0.2s ease-in-out;
+}
+
+.liked {
+  color: #9f50ff; /* Cor roxa (ou a que preferir) para o botão curtido */
+  font-weight: bold;
+}

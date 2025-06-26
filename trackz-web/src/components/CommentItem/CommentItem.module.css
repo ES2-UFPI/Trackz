@@ -1,0 +1,29 @@
+.commentWrapper {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.commentContent {
+  background-color: #282828;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  width: fit-content;
+}
+
+.username {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.text {
+  margin: 0.25rem 0 0;
+  color: #e0e0e0;
+}
