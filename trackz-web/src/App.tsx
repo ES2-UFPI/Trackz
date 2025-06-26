@@ -5,24 +5,11 @@ import Cadastro from './pages/cadastro/cadastro';
 import Dashboard from './pages/dashboard/Dashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import RotaPrivada from './routes/RotaPrivada';
+import PaginaPerfil from './pages/perfil/PaginaPerfil';
 import PaginaExplorar from './pages/explorar/Explorar'; // Renomeado de 'Explorar' para 'PaginaExplorar' para consistência
 import PaginaAlbum from './pages/album/PaginaAlbum';
+import PaginaConfiguracoes from './pages/configuracoes/PaginaConfiguracoes'; // 1. IMPORTE O NOVO COMPONENTE
 
-// --- Componentes Placeholder para futuras páginas ---
-const PaginaPerfil: React.FC = () => (
-  <div>
-    <h1>Perfil do Usuário (Em construção)</h1>
-    <p><Link to="/dashboard">Voltar para o Dashboard</Link></p>
-  </div>
-);
-
-const PaginaConfiguracoes: React.FC = () => (
-  <div>
-    <h1>Configurações (Em construção)</h1>
-    <p><Link to="/dashboard">Voltar para o Dashboard</Link></p>
-  </div>
-);
-// --- Fim dos Componentes Placeholder ---
 
 
 function App() {
@@ -52,6 +39,9 @@ function App() {
           <Route path="/perfil" element={<RotaPrivada><PaginaPerfil /></RotaPrivada>} />
           <Route path="/explorar" element={<RotaPrivada><PaginaExplorar /></RotaPrivada>} />
           <Route path="/configuracoes" element={<RotaPrivada><PaginaConfiguracoes /></RotaPrivada>} />
+          <Route path="/perfil" element={<RotaPrivada><PaginaPerfil /></RotaPrivada>} />
+          <Route path="/configuracoes" element={<RotaPrivada><PaginaConfiguracoes /></RotaPrivada>} />
+
           
           {/* ESTA É A ROTA CRÍTICA QUE DEVE EXISTIR */}
           <Route path="/album/:albumId" element={<RotaPrivada><PaginaAlbum /></RotaPrivada>} />

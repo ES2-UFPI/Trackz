@@ -39,4 +39,32 @@
   border-top: 1px solid #282828;
   width: 100%;
 }
-/* ... (media queries se adicionadas) ... */
+
+.dashboardLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #121212;
+}
+
+.dashboardMainContent {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 700px; /* Largura ideal para um feed */
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 1rem;
+}
+
+.feedContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço entre cada post */
+}

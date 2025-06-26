@@ -12,6 +12,8 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
+  color: #9f50ff;
+
 }
 
 .header {
@@ -22,7 +24,7 @@
 
 .subtitle {
   font-size: 1.1rem;
-  color: #b3b3b3;
+  color: #9f50ff;
   margin-top: 0;
   margin-bottom: 2rem;
 }

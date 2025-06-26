@@ -3,6 +3,8 @@ import Navbar from '../../components/Navbar/Navbar';
 import styles from './Explorar.module.css';
 import FormularioBusca from '../../components/FormularioBusca/FormularioBusca';
 import ResultadoItem from '../../components/ResultadoItem/ResultadoItem'; // 1. Importe o novo componente
+import { mockAlbuns } from '../../data/mockData'; // 1. IMPORTE OS DADOS
+
 
 // 2. Crie uma interface para o tipo de resultado
 interface IResultado {
@@ -12,30 +14,18 @@ interface IResultado {
   artist: string;
 }
 
-// 3. Crie os dados mockados
-const mockResults: IResultado[] = [
-  // O caminho começa com /images/, que aponta para a pasta public/images/
-  { id: '5', imageUrl: '/images/debi-tirar-mas-fotos.png', title: 'Debí Tirar Más Fotos', artist: 'Bad Bunny' },
-  { id: '1', imageUrl: '/images/nadie-sabe.jpg', title: 'nadie sabe lo que va a pasar mañana', artist: 'Bad Bunny' },
-  { id: '2', imageUrl: '/images/un-verano-sin-ti.jpg', title: 'Un Verano Sin Ti', artist: 'Bad Bunny' },
-];
-
 const PaginaExplorar: React.FC = () => {
-  // 4. Crie estados para os resultados e para o carregamento
-  const [resultados, setResultados] = useState<IResultado[]>([]);
+  const [resultados, setResultados] = useState(mockAlbuns); // Pode iniciar com os dados
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearchSubmit = (query: string) => {
-    console.log('A página Explorar recebeu a busca por:', query);
-    
-    // 5. Simula a chamada à API
-    setIsLoading(true);  // Inicia o carregamento
-    setResultados([]); // Limpa os resultados antigos
-
+    console.log('Buscando por:', query);
+    setIsLoading(true);
     setTimeout(() => {
-      setResultados(mockResults); // Define os resultados mockados após 1.5 segundos
-      setIsLoading(false);      // Termina o carregamento
-    }, 1500); // 1.5 segundos de simulação
+      // Em uma aplicação real, você filtraria os resultados aqui ou receberia da API
+      setResultados(mockAlbuns); 
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -53,16 +43,16 @@ const PaginaExplorar: React.FC = () => {
 
         {/* 6. Renderização condicional */}
         <div className={styles.resultsContainer}>
-          {isLoading && <p className={styles.loadingText}>Carregando...</p>}
-          {!isLoading && resultados.map(item => (
-            <ResultadoItem
-              key={item.id}
-              id={item.id} // <-- ADICIONE ESTA LINHA
-              imageUrl={item.imageUrl}
-              title={item.title}
-              artist={item.artist}
-            />
-          ))}
+      {isLoading && <p className={styles.loadingText}>Carregando...</p>}
+        {!isLoading && resultados.map(item => (
+          <ResultadoItem
+            key={item.id}
+            id={item.id}
+            imageUrl={item.imageUrl}
+            title={item.name} // Use 'name' em vez de 'title' para consistência
+            artist={item.artist}
+          />
+        ))}
         </div>
       </main>
     </div>
