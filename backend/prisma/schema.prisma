@@ -12,8 +12,8 @@ model User {
   name       String
   email      String   @unique
   password   String
-  bio        String?          // ✨ NOVO: biografia curta
-  avatarUrl  String?          // ✨ NOVO: foto de perfil
+  bio        String?  
+  avatarUrl  String?        
   createdAt  DateTime @default(now())
   posts      Post[]
   comments   Comment[]
@@ -23,7 +23,7 @@ model Post {
   id         String   @id @default(uuid())
   content    String
   createdAt  DateTime @default(now())
-  likes      Int      @default(0)   // usado para “populares”
+  likes      Int      @default(0)   
   user       User     @relation(fields: [userId], references: [id])
   userId     String
 }
